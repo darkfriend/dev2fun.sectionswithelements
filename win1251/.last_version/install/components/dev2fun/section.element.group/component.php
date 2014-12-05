@@ -3,7 +3,7 @@
 * 
 * @author dev2fun (darkfriend)
 * @copyright darkfriend
-* @version 0.1.1
+* @version 0.1.2
 * 
 */
 if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
@@ -61,22 +61,28 @@ foreach($arParams["FIELD_CODE"] as $key=>$val)
 	if(!$val)
 		unset($arParams["FIELD_CODE"][$key]);
 
-if(!is_array($arParams["PROPERTY_CODE"]))
+if(!is_array($arParams["PROPERTY_CODE"])){
 	$arParams["PROPERTY_CODE"] = array();
-foreach($arParams["PROPERTY_CODE"] as $key=>$val)
-	if($val==="")
-		unset($arParams["PROPERTY_CODE"][$key]);
+} else {
+	foreach($arParams["PROPERTY_CODE"] as $key=>$val){
+		if($val===""){
+			unset($arParams["PROPERTY_CODE"][$key]);
+		}
+	}
+}
+	
+
 
 $arParams["DETAIL_URL"]=trim($arParams["DETAIL_URL"]);
 
 $arParams["NEWS_COUNT"] = intval($arParams["NEWS_COUNT"]);
-if($arParams["NEWS_COUNT"]<=0)
+if($arParams["NEWS_COUNT"]<=0){
 	$arParams["NEWS_COUNT"] = 20;
-
-if($arParams["SECTION_COUNT"]<=0)
+}
+if($arParams["SECTION_COUNT"]<=0){
 	$arParams["SECTION_COUNT"] = 20;
+}
 
-//$arParams["SECTION_COUNT"] = 2;
 $arParams["CACHE_FILTER"] = $arParams["CACHE_FILTER"]=="Y";
 if(!$arParams["CACHE_FILTER"] && count($arrFilter)>0)
 	$arParams["CACHE_TIME"] = 0;
@@ -181,11 +187,11 @@ else
 }
 $arParams["SECTION_CHECK_EMPTY"] = $arParams["SECTION_CHECK_EMPTY"]!="N";
 
-if($arParams["DISPLAY_TOP_PAGER"] || $arParams["DISPLAY_BOTTOM_PAGER"])
+if($arParams["DISPLAY_TOP_PAGER"]=='Y' || $arParams["DISPLAY_BOTTOM_PAGER"]=='Y')
 {
 	$arSectionNavParams = array(
 		"nPageSize" => $arParams["SECTION_COUNT"],
-		"bDescPageNumbering" => $arParams["PAGER_DESC_NUMBERING"],
+//		"bDescPageNumbering" => $arParams["PAGER_DESC_NUMBERING"],
 		"bShowAll" => $arParams["PAGER_SHOW_ALL"],
 	);
 	$arSectionNavigation = CDBResult::GetNavParams($arSectionNavParams);
@@ -195,8 +201,8 @@ if($arParams["DISPLAY_TOP_PAGER"] || $arParams["DISPLAY_BOTTOM_PAGER"])
 else
 {
 	$arSectionNavParams = array(
-		"nTopCount" => $arParams["SECTION_COUNT"],
-		"bDescPageNumbering" => $arParams["PAGER_DESC_NUMBERING"],
+		"nPageSize" => $arParams["SECTION_COUNT"],
+//		"bDescPageNumbering" => $arParams["PAGER_DESC_NUMBERING"],
 	);
 	$arSectionNavigation = false;
 }
@@ -251,8 +257,9 @@ if($this->StartResultCache(false, array(($arParams["CACHE_GROUPS"]==="N"? false:
 		
 		//PROPERTIES FOR ELEMENTS
 		$bGetProperty = count($arParams["PROPERTY_CODE"])>0;
-		if($bGetProperty)
+		if($bGetProperty){
 			$arSelect[]="PROPERTY_*";
+		}
 		//WHERE FOR ELEMENTS
 		$arFilter = array(
 			"IBLOCK_ID" => $arResult["ID"],
@@ -269,6 +276,7 @@ if($this->StartResultCache(false, array(($arParams["CACHE_GROUPS"]==="N"? false:
 			"ID",
 			"CODE",
 			"IBLOCK_ID",
+			"IBLOCK_TYPE",
 			"IBLOCK_SECTION_ID",
 			"TIMESTAMP_X",
 			"SORT",
@@ -367,11 +375,11 @@ if($this->StartResultCache(false, array(($arParams["CACHE_GROUPS"]==="N"? false:
 				$arSection["IBLOCK_ID"],
 				0,
 				$arSection["ID"],
-				array("SECTION_BUTTONS"=>false, "SESSID"=>false)
+				array("SESSID"=>false, "CATALOG"=>true)
 			);
 			
-			$arSection["EDIT_LINK"] = $arSectionButtons["edit"]["edit_element"]["ACTION_URL"];
-			$arSection["DELETE_LINK"] = $arSectionButtons["edit"]["delete_element"]["ACTION_URL"];
+			$arSection["EDIT_LINK"] = $arSectionButtons["edit"]["edit_section"]["ACTION_URL"];
+			$arSection["DELETE_LINK"] = $arSectionButtons["edit"]["delete_section"]["ACTION_URL"];
 			
 
 			$arResult["RUBITEMS"][$arSection['ID']] = $arSection;
@@ -470,11 +478,7 @@ if($this->StartResultCache(false, array(($arParams["CACHE_GROUPS"]==="N"? false:
 					$arItem["PROPERTIES"] = $obElement->GetProperties();
 				$arItem["DISPLAY_PROPERTIES"]=array();
 				
-				if($arParams["PROPERTY_CODE"]=='ALL'){
-					foreach($arItem["PROPERTIES"] as $pid=>$prop){
-						$arItem["DISPLAY_PROPERTIES"][$pid] = CIBlockFormatProperties::GetDisplayValue($arItem, $prop, "news_out");
-					}
-				} else {
+				if($arItem["PROPERTIES"]){
 					foreach($arParams["PROPERTY_CODE"] as $pid){
 						$prop = &$arItem["PROPERTIES"][$pid];
 						if(

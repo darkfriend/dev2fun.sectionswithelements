@@ -29,7 +29,6 @@ $arSortFields = array(
 	);
 
 $arProperty_LNS = array();
-$arProperty_LNS['ALL'] = GetMessage("T_PROP_DESC_ALL");
 $rsProp = CIBlockProperty::GetList(array("sort"=>"asc", "name"=>"asc"), array("ACTIVE"=>"Y", "IBLOCK_ID"=>(isset($arCurrentValues["IBLOCK_ID"])?$arCurrentValues["IBLOCK_ID"]:$arCurrentValues["ID"])));
 while ($arr=$rsProp->Fetch())
 {
