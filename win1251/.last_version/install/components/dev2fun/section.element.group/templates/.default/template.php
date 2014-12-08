@@ -3,7 +3,7 @@
 * 
 * @author dev2fun (darkfriend)
 * @copyright darkfriend
-* @version 0.1.1
+* @version 0.1.2
 * 
 */
 /** @var array $arParams */

@@ -28,8 +28,8 @@ Class dev2fun_sectionswithelements extends CModule
 			$this->MODULE_VERSION = $arModuleVersion["VERSION"];
 			$this->MODULE_VERSION_DATE = $arModuleVersion["VERSION_DATE"];
 		} else {
-			$this->MODULE_VERSION = '0.1.1';
-			$this->MODULE_VERSION_DATE = '2014-12-03 15:00:00';
+			$this->MODULE_VERSION = '0.1.3';
+			$this->MODULE_VERSION_DATE = '2014-12-09 15:00:00';
 		}
 		$this->MODULE_NAME = GetMessage("MODULE_NAME");
 		$this->MODULE_DESCRIPTION = GetMessage("MODULE_DESCRIPTION");

@@ -3,7 +3,7 @@
 * 
 * @author dev2fun (darkfriend)
 * @copyright darkfriend
-* @version 0.1.2
+* @version 0.1.3
 * 
 */
 if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
@@ -191,22 +191,21 @@ if($arParams["DISPLAY_TOP_PAGER"]=='Y' || $arParams["DISPLAY_BOTTOM_PAGER"]=='Y'
 {
 	$arSectionNavParams = array(
 		"nPageSize" => $arParams["SECTION_COUNT"],
-//		"bDescPageNumbering" => $arParams["PAGER_DESC_NUMBERING"],
 		"bShowAll" => $arParams["PAGER_SHOW_ALL"],
 	);
 	$arSectionNavigation = CDBResult::GetNavParams($arSectionNavParams);
-	if($arSectionNavigation["SPAGEN"]==0 && $arParams["PAGER_DESC_NUMBERING_CACHE_TIME"]>0)
+	if($arSectionNavigation["PAGEN"]==0 && $arParams["PAGER_DESC_NUMBERING_CACHE_TIME"]>0)
 		$arParams["CACHE_TIME"] = $arParams["PAGER_DESC_NUMBERING_CACHE_TIME"];
 }
 else
 {
 	$arSectionNavParams = array(
 		"nPageSize" => $arParams["SECTION_COUNT"],
-//		"bDescPageNumbering" => $arParams["PAGER_DESC_NUMBERING"],
+		"bShowAll" => $arParams["PAGER_SHOW_ALL"],
 	);
 	$arSectionNavigation = false;
 }
-
+// print_r($arSectionNavigation);
 /**
 * 
 * end sectioon
@@ -391,10 +390,6 @@ if($this->StartResultCache(false, array(($arParams["CACHE_GROUPS"]==="N"? false:
 			if($arParams["INCLUDE_SUBSECTIONS"]){
 				$arFilter["INCLUDE_SUBSECTIONS"] = "Y";
 			}
-
-			$arResult["NAV_STRING"] = $rsSection->GetPageNavStringEx($navComponentObject, $arParams["PAGER_TITLE"], $arParams["PAGER_TEMPLATE"], $arParams["PAGER_SHOW_ALWAYS"]);
-			$arResult["NAV_CACHED_DATA"] = $navComponentObject->GetTemplateCachedData();
-			$arResult["NAV_RESULT"] = $rsSection;
 			
 			//ORDER BY FOR ELEMENTS
 			$arSort = array(
@@ -408,7 +403,6 @@ if($this->StartResultCache(false, array(($arParams["CACHE_GROUPS"]==="N"? false:
 			
 			$arResult["ELEMENTS"] = array();
 			$arFilter['SECTION_ID'] = intval($arSection["ID"]);
-	//		$arFilter["INCLUDE_SUBSECTIONS"] = "Y";
 			$rsElement = CIBlockElement::GetList(
 				$arSort,
 				array_merge($arFilter, $arrFilter),
@@ -494,11 +488,11 @@ if($this->StartResultCache(false, array(($arParams["CACHE_GROUPS"]==="N"? false:
 				$arResult["RUBITEMS"][$arSection['ID']]['ITEMS'][] = $arItem;
 				$arResult["ELEMENTS"][] = $arItem["ID"];
 			}
-			/*$arResult["NAV_STRING"] = $rsElement->GetPageNavStringEx($navComponentObject, $arParams["PAGER_TITLE"], $arParams["PAGER_TEMPLATE"], $arParams["PAGER_SHOW_ALWAYS"]);
-			$arResult["NAV_CACHED_DATA"] = $navComponentObject->GetTemplateCachedData();
-			$arResult["NAV_RESULT"] = $rsElement;*/
-		
 		}
+		
+		$arResult["NAV_STRING"] = $rsSection->GetPageNavStringEx($navComponentObject, $arParams["PAGER_TITLE"], $arParams["PAGER_TEMPLATE"], $arParams["PAGER_SHOW_ALWAYS"]);
+		$arResult["NAV_CACHED_DATA"] = $navComponentObject->GetTemplateCachedData();
+		$arResult["NAV_RESULT"] = $rsSection;
 		
 		if($arParams['SECTION_CHECK_EMPTY']){
 			$arResult["RUBITEMS"] = $this->checkSectionOnEmpty($arResult["RUBITEMS"]);
@@ -594,7 +588,7 @@ if(isset($arResult["ID"]))
 			$APPLICATION->SetPageProperty("description", $arResult["IPROPERTY_VALUES"]["SECTION_META_DESCRIPTION"], $arTitleOptions);
 	}
 
-	/*if($arParams["INCLUDE_IBLOCK_INTO_CHAIN"] && isset($arResult["NAME"]))
+	if($arParams["INCLUDE_IBLOCK_INTO_CHAIN"] && isset($arResult["NAME"]))
 	{
 		if($arParams["ADD_SECTIONS_CHAIN"] && is_array($arResult["SECTION"]))
 			$APPLICATION->AddChainItem(
@@ -603,9 +597,9 @@ if(isset($arResult["ID"]))
 			);
 		else
 			$APPLICATION->AddChainItem($arResult["NAME"]);
-	}*/
+	}
 
-	/*if($arParams["ADD_SECTIONS_CHAIN"] && is_array($arResult["SECTION"]))
+	if($arParams["ADD_SECTIONS_CHAIN"] && is_array($arResult["SECTION"]))
 	{
 		foreach($arResult["SECTION"]["PATH"] as $arPath)
 		{
@@ -614,7 +608,7 @@ if(isset($arResult["ID"]))
 			else
 				$APPLICATION->AddChainItem($arPath["NAME"], $arPath["~SECTION_PAGE_URL"]);
 		}
-	}*/
+	}
 
 	return $arResult["ELEMENTS"];
 }
