@@ -3,7 +3,7 @@
 * 
 * @author dev2fun (darkfriend)
 * @copyright darkfriend
-* @version 0.1.1
+* @version 0.2.1
 * 
 */
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
@@ -29,6 +29,7 @@ $arSortFields = array(
 	);
 
 $arProperty_LNS = array();
+$arProperty_LNS['ALL'] = GetMessage("T_PROP_DESC_ALL");
 $rsProp = CIBlockProperty::GetList(array("sort"=>"asc", "name"=>"asc"), array("ACTIVE"=>"Y", "IBLOCK_ID"=>(isset($arCurrentValues["IBLOCK_ID"])?$arCurrentValues["IBLOCK_ID"]:$arCurrentValues["ID"])));
 while ($arr=$rsProp->Fetch())
 {
@@ -159,6 +160,18 @@ $arComponentParameters = array(
 			"TYPE" => "CHECKBOX",
 			"DEFAULT" => "Y",
 		),
+		"SECTION_CHILD" => array(
+			"PARENT" => "SECTION",
+			"NAME" => GetMessage("T_IBLOCK_SHOW_SECTION_CHILD"),
+			"TYPE" => "CHECKBOX",
+			"DEFAULT" => "Y",
+		),
+		"DISPLAY_SECTION_PICTURE" => array(
+			"PARENT" => "SECTION",
+			"NAME" => GetMessage("T_IBLOCK_DISPLAY_SECTION_PICTURE"),
+			"TYPE" => "CHECKBOX",
+			"DEFAULT" => "Y",
+		),
 		"PARENT_SECTION" => array(
 			"PARENT" => "SECTION",
 			"NAME" => GetMessage("IBLOCK_SECTION_ID"),
@@ -172,6 +185,12 @@ $arComponentParameters = array(
 			"TYPE" => "STRING",
 			"DEFAULT" => '',
 			"MULTIPLE" => "Y"
+		),
+		"SECTION_PREVIEW_TRUNCATE_LEN" => array(
+			"PARENT" => "SECTION",
+			"NAME" => GetMessage("T_IBLOCK_SECTION_PREVIEW_TRUNCATE_LEN"),
+			"TYPE" => "STRING",
+			"DEFAULT" => "",
 		),
 		//section.end
 		"NEWS_COUNT" => array(
