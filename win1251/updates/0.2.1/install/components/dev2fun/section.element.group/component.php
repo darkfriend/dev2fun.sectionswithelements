@@ -3,7 +3,7 @@
 * 
 * @author dev2fun (darkfriend)
 * @copyright darkfriend
-* @version 0.2.1
+* @version 0.2.1.2
 * 
 */
 if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
@@ -289,15 +289,19 @@ if($this->StartResultCache(false, array(($arParams["CACHE_GROUPS"]==="N"? false:
 			"CREATED_BY",
 			"DETAIL_PICTURE",
 			"DEPTH_LEVEL",
-			"UF_*",
 		);
+
+		//CHECK AND ADD IN SELECT FOR SECTION
+		if($arParams['SECTION_PROPERTY_CODE']){
+			foreach ($arParams['SECTION_PROPERTY_CODE'] as $nameCode) {
+				if($nameCode){
+					array_push($arSelectSection,$nameCode);
+				}
+			}
+		}
 		
 		$bIncCnt = false;
 		if($arParams["SECTION_CHECK_EMPTY"]){
-			/*$bIncCnt = array(
-				'ELEMENT_SUBSECTIONS' => 'N',
-				'CNT_ACTIVE' => 'Y',
-			);*/
 			$bIncCnt = true;
 			if($arParams['INCLUDE_SUBSECTIONS']){
 				$arFilterSection['ELEMENT_SUBSECTIONS'] = 'Y'; 
@@ -305,8 +309,6 @@ if($this->StartResultCache(false, array(($arParams["CACHE_GROUPS"]==="N"? false:
 				$arFilterSection['ELEMENT_SUBSECTIONS'] = 'N'; 
 			}
 			$arFilterSection['CNT_ACTIVE'] = 'Y';
-//			$arFilterSection['CNT_ALL'] = 'N'; 
-//			$arFilterSection['>ELEMENT_CNT'] = '0';
 		}
 		//ORDER BY FOR SECTIONS
 		$arSort = array(
@@ -348,9 +350,18 @@ if($this->StartResultCache(false, array(($arParams["CACHE_GROUPS"]==="N"? false:
 			$ipropValues = new \Bitrix\Iblock\InheritedProperty\SectionValues($arSection["IBLOCK_ID"], $arSection["ID"]);
 			$arSection["IPROPERTY_VALUES"] = $ipropValues->getValues();
 			
-			if($arSection["UF_ICO_CLASS"]){
-				$rsEnum = CUserFieldEnum::GetList(array(), array("ID" =>$arSection["UF_ICO_CLASS"]));
-				$arSection["UF_ICO_CLASS"] = $rsEnum->GetNext();
+			//GET SECTION PROP
+			if($arParams['SECTION_PROPERTY_CODE']){
+				foreach ($arParams['SECTION_PROPERTY_CODE'] as $uPropName) {
+					if($uPropName && $arSection[$uPropName]){
+						$rsEnum = CUserFieldEnum::GetList(array(), array("ID" =>$arSection[$uPropName]));
+						if($uPropValue = $rsEnum->GetNext()){
+							$arSection[$uPropName] = $uPropValue;
+							$arSection['~'.$uPropName] = $uPropValue['ID'];
+						}
+						unset($uPropValue);
+					}
+				}
 			}
 			
 			if(isset($arSection["PICTURE"]) && $arParams["DISPLAY_SECTION_PICTURE"]!="N"){
