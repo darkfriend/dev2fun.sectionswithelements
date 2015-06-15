@@ -3,12 +3,15 @@
 * 
 * @author dev2fun (darkfriend)
 * @copyright darkfriend
-* @version 0.1.1
+* @version 0.2.1
 * 
 */
 $MESS["IBLOCK_CACHE_FILTER"] = "Кешировать при установленном фильтре";
 $MESS["T_PROP_DESC_ALL"] = "Все";
 $MESS["T_IBLOCK_DESC_SETTINGS_SECTIONS"] = "Настройки для разделов";
+$MESS["T_IBLOCK_SHOW_SECTION_CHILD"] = "Выводить дочерние разделы";
+$MESS["T_IBLOCK_DISPLAY_SECTION_PICTURE"] = "Выводить картинку раздела";
+$MESS["T_IBLOCK_SECTION_PREVIEW_TRUNCATE_LEN"] = "Максимальное кол-во знаков при выводе описания раздела";
 $MESS["T_IBLOCK_DESC_SETTINGS_ELEMENTS"] = "Настройки для элементов";
 $MESS["T_IBLOCK_DESC_DEPTH"] = "Уровень вложенности";
 $MESS["T_IBLOCK_DESC_COUNT_SECTIONS"] = "Кол-во выводимых разделов";
