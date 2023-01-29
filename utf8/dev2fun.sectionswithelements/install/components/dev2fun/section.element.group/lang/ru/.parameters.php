@@ -1,11 +1,11 @@
-<?
+<?php
 /**
-* 
-* @author dev2fun (darkfriend)
-* @copyright darkfriend
-* @version 0.2.1
-* 
-*/
+ *
+ * @author dev2fun (darkfriend)
+ * @copyright darkfriend
+ * @version 0.2.3
+ *
+ */
 $MESS["IBLOCK_CACHE_FILTER"] = "Кешировать при установленном фильтре";
 $MESS["T_PROP_DESC_ALL"] = "Все";
 $MESS["T_IBLOCK_DESC_SETTINGS_SECTIONS"] = "Настройки для разделов";
@@ -54,4 +54,5 @@ $MESS["CP_BNL_INCLUDE_SUBSECTIONS"] = "Показывать элементы п�
 $MESS["CP_BNL_SET_BROWSER_TITLE"] = "Устанавливать заголовок окна браузера";
 $MESS["CP_BNL_SET_META_KEYWORDS"] = "Устанавливать ключевые слова страницы";
 $MESS["CP_BNL_SET_META_DESCRIPTION"] = "Устанавливать описание страницы";
-?>
+$MESS["T_IBLOCK_SECTION_CNT_ELEMENTS"] = "Выводить кол-во элементов в разделе";
+$MESS["T_IBLOCK_NEWS_SHOW_SECTION"] = "Выводить элементы";
