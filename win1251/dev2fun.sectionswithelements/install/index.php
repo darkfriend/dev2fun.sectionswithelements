@@ -5,7 +5,7 @@ IncludeModuleLangFile(__FILE__);
  *
  * @author dev2fun (darkfriend)
  * @copyright darkfriend
- * @version 0.1.1
+ * @version 1.0.0
  *
  */
 if (class_exists("dev2fun_sectionswithelements")) return;
@@ -31,8 +31,8 @@ class dev2fun_sectionswithelements extends CModule
             $this->MODULE_VERSION = '0.1.3';
             $this->MODULE_VERSION_DATE = '2014-12-09 15:00:00';
         }
-        $this->MODULE_NAME = GetMessage("MODULE_NAME");
-        $this->MODULE_DESCRIPTION = GetMessage("MODULE_DESCRIPTION");
+        $this->MODULE_NAME = GetMessage("D2F_MODULE_NAME");
+        $this->MODULE_DESCRIPTION = GetMessage("D2F_MODULE_DESCRIPTION");
         $this->PARTNER_NAME = "dev2fun";
         $this->PARTNER_URI = "http://dev2fun.com/";
     }
@@ -42,7 +42,7 @@ class dev2fun_sectionswithelements extends CModule
         global $APPLICATION;
         if (!check_bitrix_sessid()) return;
 
-        $APPLICATION->IncludeAdminFile(GetMessage("STEP1"), $_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/dev2fun.sectionswithelements/install/step1.php");
+        $APPLICATION->IncludeAdminFile(GetMessage("D2F_STEP1"), $_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/dev2fun.sectionswithelements/install/step1.php");
     }
 
 
@@ -51,6 +51,6 @@ class dev2fun_sectionswithelements extends CModule
         global $APPLICATION;
         if (!check_bitrix_sessid()) return;
 
-        $APPLICATION->IncludeAdminFile(GetMessage("UNSTEP1"), $_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/dev2fun.sectionswithelements/install/unstep1.php");
+        $APPLICATION->IncludeAdminFile(GetMessage("D2F_UNSTEP1"), $_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/dev2fun.sectionswithelements/install/unstep1.php");
     }
 }

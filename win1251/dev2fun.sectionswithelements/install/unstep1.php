@@ -3,7 +3,7 @@
  *
  * @author dev2fun (darkfriend)
  * @copyright darkfriend
- * @version 0.1.1
+ * @version 1.0.0
  *
  */
 if (!check_bitrix_sessid()) return;
@@ -21,16 +21,16 @@ $CDev2fun_sectionswithelements = new dev2fun_sectionswithelements();
 //check permissions /bitrix/components/
 $permBX = CCheckPermForComponents::checkPermissions($_SERVER["DOCUMENT_ROOT"] . "/bitrix/components");
 if (!($permBX === true)) {
-    CAdminMessage::ShowMessage(GetMessage($permBX, ['#PATH#' => '/bitrix/components/']));
+    CAdminMessage::ShowMessage(GetMessage("D2F_{$permBX}", ['#PATH#' => '/bitrix/components/']));
     return false;
 }
 
 //�������� ���� ������ ����������
 if (!DeleteDirFilesEx("/bitrix/components/dev2fun/section.element.group")) {
-    CAdminMessage::ShowMessage(GetMessage("ERRORS_DELETE_DIR_ED"));
+    CAdminMessage::ShowMessage(GetMessage("D2F_ERRORS_DELETE_DIR_ED"));
     return false;
 }
 
 UnRegisterModule($CDev2fun_sectionswithelements->MODULE_ID);
 
-echo CAdminMessage::ShowNote(GetMessage("UNINSTALL_SUCCESS"));
+echo CAdminMessage::ShowNote(GetMessage("D2F_UNINSTALL_SUCCESS"));

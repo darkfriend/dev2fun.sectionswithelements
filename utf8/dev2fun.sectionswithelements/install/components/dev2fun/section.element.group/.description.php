@@ -3,14 +3,14 @@
  *
  * @author dev2fun (darkfriend)
  * @copyright darkfriend
- * @version 0.1.1
+ * @version 1.0.0
  *
  */
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
 $arComponentDescription = [
-    "NAME" => GetMessage("T_IBLOCK_DESC_LIST"),
-    "DESCRIPTION" => GetMessage("T_IBLOCK_DESC_LIST_DESC"),
+    "NAME" => GetMessage("D2F_T_IBLOCK_DESC_LIST"),
+    "DESCRIPTION" => GetMessage("D2F_T_IBLOCK_DESC_LIST_DESC"),
     "ICON" => "/images/rub_el_list.gif",
     "SORT" => 20,
     //	"SCREENSHOT" => array(
@@ -22,7 +22,7 @@ $arComponentDescription = [
         "ID" => "dev2fun",
         "CHILD" => [
             "ID" => "elements",
-            "NAME" => GetMessage("T_IBLOCK_DESC_CONTENT"),
+            "NAME" => GetMessage("D2F_T_IBLOCK_DESC_CONTENT"),
             "SORT" => 10,
             "CHILD" => [
                 "ID" => "section.element.group",
