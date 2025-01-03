@@ -1,25 +1,27 @@
 <?php
+
 /**
  * @author dev2fun (darkfriend)
  * @copyright darkfriend
  * @version 0.2.16
  */
-if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
+    die();
+}
 
 class Dev2funListElements extends CBitrixComponent
 {
-
     private $type;
 
     /**
-     *
      * @param array $arrSections
-     *
      * @return array is not section empty
      */
-    public final function checkSectionOnEmpty($arrSections)
+    final public function checkSectionOnEmpty($arrSections)
     {
-        if (empty($arrSections)) return false;
+        if (empty($arrSections)) {
+            return false;
+        }
         foreach ($arrSections as $keySection => $arrSection) {
             if ($arrSection['ELEMENT_CNT'] <= 0) {
                 unset($arrSections[$keySection]);
@@ -42,7 +44,9 @@ class Dev2funListElements extends CBitrixComponent
     public function getElementsSection($arRequestParams, $arParams)
     {
         $result = [];
-        if ($arParams['NEWS_SHOW_SECTION'] == 'N') return $result;
+        if ($arParams['NEWS_SHOW_SECTION'] == 'N') {
+            return $result;
+        }
         if (!$arRequestParams['sort']) {
             $arRequestParams['sort'] = [];
         }
@@ -72,53 +76,76 @@ class Dev2funListElements extends CBitrixComponent
             $arItem["EDIT_LINK"] = $arButtons["edit"]["edit_element"]["ACTION_URL"];
             $arItem["DELETE_LINK"] = $arButtons["edit"]["delete_element"]["ACTION_URL"];
 
-            if ($arParams["PREVIEW_TRUNCATE_LEN"] > 0)
-                $arItem["PREVIEW_TEXT"] = $obParser->html_cut($arItem["PREVIEW_TEXT"], $arParams["PREVIEW_TRUNCATE_LEN"]);
+            if ($arParams["PREVIEW_TRUNCATE_LEN"] > 0) {
+                $arItem["PREVIEW_TEXT"] = $obParser->html_cut(
+                    $arItem["PREVIEW_TEXT"],
+                    $arParams["PREVIEW_TRUNCATE_LEN"]
+                );
+            }
 
-            if (strlen($arItem["ACTIVE_FROM"]) > 0)
-                $arItem["DISPLAY_ACTIVE_FROM"] = CIBlockFormatProperties::DateFormat($arParams["ACTIVE_DATE_FORMAT"], MakeTimeStamp($arItem["ACTIVE_FROM"], CSite::GetDateFormat()));
-            else
+            if (strlen($arItem["ACTIVE_FROM"]) > 0) {
+                $arItem["DISPLAY_ACTIVE_FROM"] = CIBlockFormatProperties::DateFormat(
+                    $arParams["ACTIVE_DATE_FORMAT"],
+                    MakeTimeStamp($arItem["ACTIVE_FROM"], CSite::GetDateFormat())
+                );
+            } else {
                 $arItem["DISPLAY_ACTIVE_FROM"] = "";
+            }
 
             $ipropValues = new \Bitrix\Iblock\InheritedProperty\ElementValues($arItem["IBLOCK_ID"], $arItem["ID"]);
             $arItem["IPROPERTY_VALUES"] = $ipropValues->getValues();
 
             if (isset($arItem["PREVIEW_PICTURE"])) {
-                $arItem["PREVIEW_PICTURE"] = (0 < $arItem["PREVIEW_PICTURE"] ? CFile::GetFileArray($arItem["PREVIEW_PICTURE"]) : false);
+                $arItem["PREVIEW_PICTURE"] = (0 < $arItem["PREVIEW_PICTURE"] ? CFile::GetFileArray(
+                    $arItem["PREVIEW_PICTURE"]
+                ) : false);
                 if ($arItem["PREVIEW_PICTURE"]) {
                     $arItem["PREVIEW_PICTURE"]["ALT"] = $arItem["IPROPERTY_VALUES"]["ELEMENT_PREVIEW_PICTURE_FILE_ALT"];
-                    if ($arItem["PREVIEW_PICTURE"]["ALT"] == "")
+                    if ($arItem["PREVIEW_PICTURE"]["ALT"] == "") {
                         $arItem["PREVIEW_PICTURE"]["ALT"] = $arItem["NAME"];
+                    }
                     $arItem["PREVIEW_PICTURE"]["TITLE"] = $arItem["IPROPERTY_VALUES"]["ELEMENT_PREVIEW_PICTURE_FILE_TITLE"];
-                    if ($arItem["PREVIEW_PICTURE"]["TITLE"] == "")
+                    if ($arItem["PREVIEW_PICTURE"]["TITLE"] == "") {
                         $arItem["PREVIEW_PICTURE"]["TITLE"] = $arItem["NAME"];
+                    }
                 }
             }
             if (isset($arItem["DETAIL_PICTURE"])) {
-                $arItem["DETAIL_PICTURE"] = (0 < $arItem["DETAIL_PICTURE"] ? CFile::GetFileArray($arItem["DETAIL_PICTURE"]) : false);
-                if ($arItem["DETAIL_PICTURE"]) {
+                $arItem["DETAIL_PICTURE"] = 0 < $arItem["DETAIL_PICTURE"]
+                    ? CFile::GetFileArray($arItem["DETAIL_PICTURE"])
+                    : false;
+                if (!empty($arItem["DETAIL_PICTURE"])) {
                     $arItem["DETAIL_PICTURE"]["ALT"] = $arItem["IPROPERTY_VALUES"]["ELEMENT_DETAIL_PICTURE_FILE_ALT"];
-                    if ($arItem["DETAIL_PICTURE"]["ALT"] == "")
+                    if (empty($arItem["DETAIL_PICTURE"]["ALT"])) {
                         $arItem["DETAIL_PICTURE"]["ALT"] = $arItem["NAME"];
+                    }
                     $arItem["DETAIL_PICTURE"]["TITLE"] = $arItem["IPROPERTY_VALUES"]["ELEMENT_DETAIL_PICTURE_FILE_TITLE"];
-                    if ($arItem["DETAIL_PICTURE"]["TITLE"] == "")
+                    if (empty($arItem["DETAIL_PICTURE"]["TITLE"])) {
                         $arItem["DETAIL_PICTURE"]["TITLE"] = $arItem["NAME"];
+                    }
                 }
             }
 
             $arItem["FIELDS"] = [];
-            foreach ($arParams["FIELD_CODE"] as $code)
-                if (array_key_exists($code, $arItem))
+            foreach ($arParams["FIELD_CODE"] as $code) {
+                if (array_key_exists($code, $arItem)) {
                     $arItem["FIELDS"][$code] = $arItem[$code];
+                }
+            }
 
             $bGetProperty = count($arParams["PROPERTY_CODE"]) > 0;
-            if ($bGetProperty)
+            if ($bGetProperty) {
                 $arItem["PROPERTIES"] = $obElement->GetProperties();
+            }
             $arItem["DISPLAY_PROPERTIES"] = [];
 
-            if ($arParams["PROPERTY_CODE"] == 'ALL') {
+            if ($arParams["PROPERTY_CODE"] === 'ALL') {
                 foreach ($arItem["PROPERTIES"] as $pid => $prop) {
-                    $arItem["DISPLAY_PROPERTIES"][$pid] = CIBlockFormatProperties::GetDisplayValue($arItem, $prop, "news_out");
+                    $arItem["DISPLAY_PROPERTIES"][$pid] = CIBlockFormatProperties::GetDisplayValue(
+                        $arItem,
+                        $prop,
+                        "news_out"
+                    );
                 }
             } else {
                 foreach ($arParams["PROPERTY_CODE"] as $pid) {
@@ -127,7 +154,11 @@ class Dev2funListElements extends CBitrixComponent
                         (is_array($prop["VALUE"]) && count($prop["VALUE"]) > 0)
                         || (!is_array($prop["VALUE"]) && strlen($prop["VALUE"]) > 0)
                     ) {
-                        $arItem["DISPLAY_PROPERTIES"][$pid] = CIBlockFormatProperties::GetDisplayValue($arItem, $prop, "news_out");
+                        $arItem["DISPLAY_PROPERTIES"][$pid] = CIBlockFormatProperties::GetDisplayValue(
+                            $arItem,
+                            $prop,
+                            "news_out"
+                        );
                     }
                 }
             }
@@ -150,7 +181,9 @@ class Dev2funListElements extends CBitrixComponent
      */
     public final function GetArraySectionsID($arraySections)
     {
-        if (empty($arraySections)) return false;
+        if (empty($arraySections)) {
+            return false;
+        }
         for ($i = 0, $cnt = count($arraySections); $i < $cnt; $i++) {
             if (is_numeric($arraySections[$i])) {
                 $arraySections[$i] = intval($arraySections[$i]);
@@ -170,7 +203,6 @@ class Dev2funListElements extends CBitrixComponent
 
     public final function GetArraySectionInfo()
     {
-
     }
 
     /**
@@ -182,7 +214,9 @@ class Dev2funListElements extends CBitrixComponent
      */
     public final function getParentSectionArray($item, $tools = 'prev', $arRequestParams = [], $arParams = [])
     {
-        if (!$item['IBLOCK_SECTION_ID']) return false;
+        if (!$item['IBLOCK_SECTION_ID']) {
+            return false;
+        }
         $res = CIBlockSection::GetByID($item['IBLOCK_SECTION_ID']);
         if ($ar_res = $res->GetNext()) {
             if ($arRequestParams) {
@@ -221,7 +255,6 @@ class Dev2funListElements extends CBitrixComponent
      */
     public final function conditionResultArray($arrItems, $pathGroupKeys = 'SECTION_RESULT/ID')
     {
-
         $result = [];
         $groupPath = explode('/', $pathGroupKeys);
 
@@ -251,12 +284,13 @@ class Dev2funListElements extends CBitrixComponent
      */
     private function recResultArray($item, $groupPath, $arrRes, $step)
     {
-        if (!$arrRes) return false;
+        if (!$arrRes) {
+            return false;
+        }
         $result = false;
 
         if (is_array($item)) {
             foreach ($item as $key => $val) {
-
                 if (!$step && $step !== 0) {
                     $step = 0;
                 }
