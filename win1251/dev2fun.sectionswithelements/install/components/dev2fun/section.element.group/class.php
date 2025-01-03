@@ -1,10 +1,8 @@
 <?php
 /**
- *
  * @author dev2fun (darkfriend)
  * @copyright darkfriend
- * @version 0.1.1
- *
+ * @version 0.2.16
  */
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
@@ -31,13 +29,13 @@ class Dev2funListElements extends CBitrixComponent
     }
 
     /**
-     * ����� ���������� ������ � �������������� id
-     * @param array $arRequestParams - ������<br>
-     *        arSort - ������ ����������
-     *        arFilter - ������ ��������
-     *        arNavParams - ������ ���������
-     *        arSelect - ������ ������������ ������
-     * @param array $arParams - ��������� ����������
+     * Метод возвращает массив с целочисленными id
+     * @param array $arRequestParams - запрос<br>
+     *      arSort - массив сортировки
+     *      arFilter - массив фильтров
+     *      arNavParams - массив навигации
+     *      arSelect - массив возвращаемых данных
+     * @param array $arParams - параметры компонента
      *
      * @return array|false
      */
@@ -113,6 +111,7 @@ class Dev2funListElements extends CBitrixComponent
                 if (array_key_exists($code, $arItem))
                     $arItem["FIELDS"][$code] = $arItem[$code];
 
+            $bGetProperty = count($arParams["PROPERTY_CODE"]) > 0;
             if ($bGetProperty)
                 $arItem["PROPERTIES"] = $obElement->GetProperties();
             $arItem["DISPLAY_PROPERTIES"] = [];
@@ -144,7 +143,7 @@ class Dev2funListElements extends CBitrixComponent
     }
 
     /**
-     * ����� ���������� ������ � �������������� id
+     * Метод возвращает массив с целочисленными id
      * @param array $arraySections
      *
      * @return array|false
@@ -176,8 +175,8 @@ class Dev2funListElements extends CBitrixComponent
 
     /**
      *
-     * @param array $item ������ �������
-     * @param string|integer $tools DEPTH_LEVEL(int, ������� �����������)|prev(string, ��������� ��������)|main_prev(string, ������� ��������)
+     * @param array $item массив раздела
+     * @param string|integer $tools DEPTH_LEVEL(int, уровень вложенности)|prev(string, ближайший родитель)|main_prev(string, главный родитель)
      *
      * @return array
      */
@@ -213,12 +212,12 @@ class Dev2funListElements extends CBitrixComponent
     }
 
     /**
-     * ������������ ������, ��������� �� ��������� ������
+     * Пересобирает массив, группируя по необхомым ключам
      *
      * @param array $arrItems
-     * @param string $pathGroupKeys ���� �� ������������� ��������
+     * @param string $pathGroupKeys путь до группирующего значения
      *
-     * @return array ���������������
+     * @return array сгруппированный
      */
     public final function conditionResultArray($arrItems, $pathGroupKeys = 'SECTION_RESULT/ID')
     {
@@ -241,7 +240,7 @@ class Dev2funListElements extends CBitrixComponent
     }
 
     /**
-     * ��������� ������� ������� �� ������� ������������� ����� � ���������� �������� � ��� ��� ��� �����������
+     * Проверяет текущий элемент на наличие группирующего ключа и сравнивает значения с тем что уже объединенно
      *
      * @param array $item
      * @param array $groupPath
@@ -280,7 +279,7 @@ class Dev2funListElements extends CBitrixComponent
     }
 
     /**
-     * ��������� ������� ����� � ����� �� ������
+     * Проверяет наличие ключа в путях из ключей
      *
      * @param string $key
      * @param array|string $groupPath
@@ -290,7 +289,6 @@ class Dev2funListElements extends CBitrixComponent
      */
     private function recReturnKeyGroup($key, $groupPath, $step = 0)
     {
-
         if (is_array($groupPath)) {
             $groupPath = $this->recReturnKeyGroup($key, $groupPath[$step]);
         }
@@ -303,13 +301,13 @@ class Dev2funListElements extends CBitrixComponent
     }
 
     /**
-     * ���������� �������� ��������������� �������, �������� ���� �� ������
+     * Возвращает значение результирующего массива, учитывая путь из ключей
      *
      * @param array $arrRes
      * @param array $groupPath
      * @param integer $key
      *
-     * @return string �������� � �������������� �������
+     * @return string значение в результирующем массиве
      */
     private function recReturnValueArResult($arrRes, $groupPath, $key = 0)
     {
@@ -325,6 +323,13 @@ class Dev2funListElements extends CBitrixComponent
         return $res;
     }
 
+    /**
+     * Отрисовка
+     * @param array $arAllResult
+     * @param array $arParams
+     * @param string|null $templateFile
+     * @return false|void
+     */
     public function render($arAllResult, $arParams, $templateFile = null)
     {
         if (!$templateFile) {
@@ -345,8 +350,8 @@ class Dev2funListElements extends CBitrixComponent
     }
 
     /**
-     * ����� ������
-     * @param array $params ������ ����������
+     * Вывод данных
+     * @param array $params массив параметров
      */
     public function recRender($params)
     {
@@ -370,10 +375,10 @@ class Dev2funListElements extends CBitrixComponent
     }
 
     /**
-     * ������� ��� ������
-     * @param string $tempPath ����� �� �����
-     * @param array $arResult ������ ��������� ������
-     * @param string $keyName ���������� ����������
+     * Выводит все данные
+     * @param string $tempPath пусть до файла
+     * @param array $arResult массив выводимых данных
+     * @param string $keyName глобальная переменная
      */
     public function ob($tempPath, $arResult, $keyName = 'arResult')
     {
